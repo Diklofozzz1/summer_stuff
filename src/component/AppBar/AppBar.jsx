@@ -32,12 +32,12 @@ export default function MenuAppBar() {
 
     return (
         <div className={classes.root}>
-            <FormGroup>
-                <FormControlLabel
-                    control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-                    label={auth ? 'Logout' : 'Login'}
-                />
-            </FormGroup>
+            {/*<FormGroup>*/}
+            {/*    <FormControlLabel*/}
+            {/*        control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}*/}
+            {/*        label={auth ? 'Logout' : 'Login'}*/}
+            {/*    />*/}
+            {/*</FormGroup>*/}
             <AppBar className={classes.appbar} position="static">
                 <Toolbar>
                     <Typography variant="h4" className={classes.title}>
@@ -92,7 +92,7 @@ export default function MenuAppBar() {
                             >
                                 <MenuItem onClick={handleClose}>Информация для вещания</MenuItem>
                                 <MenuItem onClick={handleClose}>Настройки</MenuItem>
-                                <MenuItem className={classes.logout} onClick={handleClose}>Выйти</MenuItem>
+                                <MenuItem className={classes.logout} onClick={handleChange}>Выйти </MenuItem>
                             </Menu>
                         </div>
                     )}

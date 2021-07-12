@@ -8,6 +8,7 @@ const Routes = () => {
         <BrowserRouter>
             <Switch>
                 <Route path='/stream' component={StreamPage} />
+                {/*<Route path='/govno' component={StreamPage} />*/}
             </Switch>
         </BrowserRouter>
     )

@@ -20,8 +20,8 @@ export const useStyles = makeStyles((theme) => ({
 
     appbar: {
         backgroundColor: '#9AA2BF',
-        borderBottomLeftRadius: 5,
-        borderBottomRightRadius: 5,
+        // borderBottomLeftRadius: 5,
+        // borderBottomRightRadius: 5,
     },
 
     appbar_buttons_group:{
