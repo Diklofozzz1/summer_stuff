@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+import {cookie} from "../../endpoint/cookie";
+
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import {
@@ -12,7 +14,7 @@ import {
 
 import {useStyles} from "./AppBarStyle";
 
-export default function MenuAppBar() {
+export default function MenuAppBar({parent}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
@@ -34,6 +36,9 @@ export default function MenuAppBar() {
         if (isAuth) {
             setAuth(true);
             setAnchorEl(null);
+
+            cookie.set('isAuth', true);
+            parent.setState({isAuth: true});
         }
 
         setOpen(false);
@@ -153,7 +158,11 @@ export default function MenuAppBar() {
                                     >
                                         <MenuItem onClick={()=>{}}>Информация для вещания</MenuItem>
                                         <MenuItem onClick={()=>{}}>Настройки</MenuItem>
-                                        <MenuItem className={classes.logout} onClick={()=>{setAuth(false)}}>Выйти </MenuItem>
+                                        <MenuItem className={classes.logout}    onClick={()=>{setAuth(false);
+                                                                                cookie.set('isAuth', false);
+                                                                                parent.setState({isAuth: false})}}>
+                                            Выйти
+                                        </MenuItem>
                                     </Menu>
                                 </div>
                             ) : (
