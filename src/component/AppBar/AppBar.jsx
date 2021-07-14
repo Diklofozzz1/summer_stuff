@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import {cookie} from "../../endpoint/cookie";
 
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import { AccountCircle, Visibility, VisibilityOff } from '@material-ui/icons';
 
 import {
     AppBar, Toolbar, Typography,
@@ -18,6 +18,9 @@ export default function MenuAppBar({parent}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
+
+    const [showPass, showPassword] = useState(false);
+    const [showConfPass, showConfirmedPass] = useState(false);
 
     const classes = useStyles();
     const [auth, setAuth] = useState(true);
@@ -60,6 +63,51 @@ export default function MenuAppBar({parent}) {
 
     const [regModel, openRegModal] = useState(false);
 
+    const PasswordField = () => (
+        <TextField
+            margin="dense"
+            id="name"
+            label="Password (more then 8 characters)"
+            value={password}
+            error={password.length < 8}
+            onChange={e => setPassword(e.target.value)}
+            type= {showPass ? '': 'password'}
+            fullWidth
+            InputProps={{
+                endAdornment: showPass ?
+                    <IconButton
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={() => {showPassword(false)}}
+                        children={<Visibility />}
+                        color="inherit" />
+                    :
+                    <IconButton
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={() => {showPassword(true)}}
+                        children={<VisibilityOff />}
+                        color="inherit" />
+            }}
+        />
+    );
+
+    const EmailField = () => (
+        <TextField
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email Address"
+            error={!checkEmail(email)}
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            type="email"
+            fullWidth
+        />
+    );
+
     return (
         <div className={classes.root}>
             <AppBar className={classes.appbar} position="static">
@@ -70,34 +118,38 @@ export default function MenuAppBar({parent}) {
                             <DialogContentText>
                                 Введите необходимые поля
                             </DialogContentText>
+
+                            <EmailField />
+                            <PasswordField />
+
                             <TextField
-                                autoFocus
-                                margin="dense"
-                                id="email"
-                                label="Email Address"
-                                error={!checkEmail(email)}
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
-                                type="email"
-                                fullWidth
-                            />
-                            <TextField
-                                margin="dense"
-                                id="name"
-                                label="Password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                type="password"
-                                fullWidth
-                            />
-                            <TextField
+                                lab
                                 margin="dense"
                                 id="name"
                                 label="Confirm password"
                                 value={confirmedPassword}
                                 onChange={e => setConfirmedPassword(e.target.value)}
-                                type="password"
+                                type= {showConfPass ? '': 'password'}
+                                error={password !== confirmedPassword || confirmedPassword.length === 0}
                                 fullWidth
+                                InputProps={{
+                                    endAdornment: showConfPass ?
+                                        <IconButton
+                                            aria-label="account of current user"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            onClick={() => {showConfirmedPass(false)}}
+                                            children={<Visibility />}
+                                            color="inherit" />
+                                        :
+                                        <IconButton
+                                            aria-label="account of current user"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            onClick={() => {showConfirmedPass(true)}}
+                                            children={<VisibilityOff />}
+                                            color="inherit" />
+                                }}
                             />
                         </DialogContent>
                         <DialogActions>
@@ -176,26 +228,8 @@ export default function MenuAppBar({parent}) {
                                             <DialogContentText>
                                                 Добро пожаловать на сайт! Для входа в систему введите ваш почтовый адрес и пароль!
                                             </DialogContentText>
-                                            <TextField
-                                                autoFocus
-                                                margin="dense"
-                                                id="email"
-                                                label="Email Address"
-                                                onChange={e => setEmail(e.target.value)}
-                                                value={email}
-                                                type="email"
-                                                fullWidth
-                                                error={!checkEmail(email)}
-                                            />
-                                            <TextField
-                                                margin="dense"
-                                                id="name"
-                                                label="Password"
-                                                onChange={e => setPassword(e.target.value)}
-                                                value={password}
-                                                type="password"
-                                                fullWidth
-                                            />
+                                            <EmailField />
+                                            <PasswordField />
                                         </DialogContent>
                                         <DialogActions>
                                             <Button onClick={()=>{handleCloseModal(false)}} color="primary">
