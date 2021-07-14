@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 import {cookie} from "../../endpoint/cookie";
 
@@ -10,9 +10,11 @@ import {
     Button, IconButton,
     DialogContentText, DialogContent,
     DialogActions, DialogTitle, Dialog,
-    TextField } from '@material-ui/core';
+    TextField, FormControlLabel, Switch
+} from '@material-ui/core';
 
 import {useStyles} from "./AppBarStyle";
+import {PaletteProvider} from "../../palette/PaletteProvider";
 
 export default function MenuAppBar({parent}) {
     const classes = useStyles();
@@ -61,6 +63,16 @@ export default function MenuAppBar({parent}) {
     }
 
     const [regModel, openRegModal] = useState(false);
+
+    const [state, setState] = React.useState({
+        checkedA: true,
+        checkedB: true,
+    });
+
+    const handleThemeChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.checked });
+        useContext(PaletteProvider);
+    };
 
     return (
         <div className={classes.root}>
@@ -213,6 +225,11 @@ export default function MenuAppBar({parent}) {
                                     >
                                         <MenuItem onClick={()=>{}}>Информация для вещания</MenuItem>
                                         <MenuItem onClick={()=>{}}>Настройки</MenuItem>
+                                        <MenuItem>
+                                            <FormControlLabel
+                                                control={<Switch checked={state.checkedA} onChange={handleThemeChange} name="checkedA" />}
+                                            label="DARK mod"
+                                        /></MenuItem>
                                         <MenuItem className={classes.logout}    onClick={()=>{setAuth(false);
                                                                                 cookie.set('isAuth', false);
                                                                                 parent.setState({isAuth: false})}}>

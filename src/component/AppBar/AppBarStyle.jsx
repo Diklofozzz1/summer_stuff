@@ -19,7 +19,7 @@ export const useStyles = makeStyles((theme) => ({
     },
 
     appbar: {
-        backgroundColor: '#9AA2BF',
+        // backgroundColor: '#9AA2BF',
         // borderBottomLeftRadius: 5,
         // borderBottomRightRadius: 5,
     },
@@ -34,6 +34,6 @@ export const useStyles = makeStyles((theme) => ({
     },
 
     logout:{
-        color: "red",
+        color: "#e35252",
     },
 }));

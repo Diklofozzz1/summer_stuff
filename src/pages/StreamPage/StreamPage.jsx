@@ -10,7 +10,6 @@ import PLayer from "../../component/PLayer/PLayer";
 import Chat from "../../component/Chat/Chat";
 
 
-
 export default class StreamPage extends React.Component {
     constructor(props) {
         super(props);
