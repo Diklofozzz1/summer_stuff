@@ -63,51 +63,6 @@ export default function MenuAppBar({parent}) {
 
     const [regModel, openRegModal] = useState(false);
 
-    const PasswordField = () => (
-        <TextField
-            margin="dense"
-            id="name"
-            label="Password (more then 8 characters)"
-            value={password}
-            error={password.length < 8}
-            onChange={e => setPassword(e.target.value)}
-            type= {showPass ? '': 'password'}
-            fullWidth
-            InputProps={{
-                endAdornment: showPass ?
-                    <IconButton
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={() => {showPassword(false)}}
-                        children={<Visibility />}
-                        color="inherit" />
-                    :
-                    <IconButton
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={() => {showPassword(true)}}
-                        children={<VisibilityOff />}
-                        color="inherit" />
-            }}
-        />
-    );
-
-    const EmailField = () => (
-        <TextField
-            autoFocus
-            margin="dense"
-            id="email"
-            label="Email Address"
-            error={!checkEmail(email)}
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            type="email"
-            fullWidth
-        />
-    );
-
     return (
         <div className={classes.root}>
             <AppBar className={classes.appbar} position="static">
@@ -119,8 +74,46 @@ export default function MenuAppBar({parent}) {
                                 Введите необходимые поля
                             </DialogContentText>
 
-                            <EmailField />
-                            <PasswordField />
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="email"
+                                label="Email Address"
+                                error={!checkEmail(email)}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                type="email"
+                                fullWidth
+                            />
+
+                            <TextField
+                                margin="dense"
+                                id="name"
+                                label="Password (more then 8 characters)"
+                                value={password}
+                                error={password.length < 8}
+                                onChange={e => setPassword(e.target.value)}
+                                type= {showPass ? '': 'password'}
+                                fullWidth
+                                InputProps={{
+                                    endAdornment: showPass ?
+                                        <IconButton
+                                            aria-label="account of current user"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            onClick={() => {showPassword(false)}}
+                                            children={<Visibility />}
+                                            color="inherit" />
+                                        :
+                                        <IconButton
+                                            aria-label="account of current user"
+                                            aria-controls="menu-appbar"
+                                            aria-haspopup="true"
+                                            onClick={() => {showPassword(true)}}
+                                            children={<VisibilityOff />}
+                                            color="inherit" />
+                                }}
+                            />
 
                             <TextField
                                 lab
@@ -228,8 +221,46 @@ export default function MenuAppBar({parent}) {
                                             <DialogContentText>
                                                 Добро пожаловать на сайт! Для входа в систему введите ваш почтовый адрес и пароль!
                                             </DialogContentText>
-                                            <EmailField />
-                                            <PasswordField />
+                                            <TextField
+                                                autoFocus
+                                                margin="dense"
+                                                id="email"
+                                                label="Email Address"
+                                                error={!checkEmail(email)}
+                                                value={email}
+                                                onChange={e => setEmail(e.target.value)}
+                                                type="email"
+                                                fullWidth
+                                            />
+
+                                            <TextField
+                                                margin="dense"
+                                                id="name"
+                                                label="Password (more then 8 characters)"
+                                                value={password}
+                                                error={password.length < 8}
+                                                onChange={e => setPassword(e.target.value)}
+                                                type= {showPass ? '': 'password'}
+                                                fullWidth
+                                                InputProps={{
+                                                    endAdornment: showPass ?
+                                                        <IconButton
+                                                            aria-label="account of current user"
+                                                            aria-controls="menu-appbar"
+                                                            aria-haspopup="true"
+                                                            onClick={() => {showPassword(false)}}
+                                                            children={<Visibility />}
+                                                            color="inherit" />
+                                                        :
+                                                        <IconButton
+                                                            aria-label="account of current user"
+                                                            aria-controls="menu-appbar"
+                                                            aria-haspopup="true"
+                                                            onClick={() => {showPassword(true)}}
+                                                            children={<VisibilityOff />}
+                                                            color="inherit" />
+                                                }}
+                                            />
                                         </DialogContent>
                                         <DialogActions>
                                             <Button onClick={()=>{handleCloseModal(false)}} color="primary">
