@@ -26,7 +26,7 @@ export default class StreamPage extends React.Component {
         return(
             <div>
                 <MenuAppBar parent={this}/>
-                <PLayer  />
+                <PLayer />
                 <div style={{position: "absolute", right: 0}}>
                     <Chat disabled = {this.state.isAuth === false} />
                 </div>

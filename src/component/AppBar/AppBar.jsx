@@ -15,17 +15,16 @@ import {
 import {useStyles} from "./AppBarStyle";
 
 export default function MenuAppBar({parent}) {
+    const classes = useStyles();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
-
     const [showPass, showPassword] = useState(false);
     const [showConfPass, showConfirmedPass] = useState(false);
-
-    const classes = useStyles();
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
-
     const [openModal, setOpen] = useState(false);
 
     const validateEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -73,6 +72,17 @@ export default function MenuAppBar({parent}) {
                             <DialogContentText>
                                 Введите необходимые поля
                             </DialogContentText>
+
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="username"
+                                label="Your username"
+                                error={username.length < 5}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
+                                fullWidth
+                            />
 
                             <TextField
                                 autoFocus
