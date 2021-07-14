@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 
 import {useStyles} from "./AppBarStyle";
-import {PaletteProvider} from "../../palette/PaletteProvider";
+import { PaletteContext, themes } from '../../palette/PaletteContext';
 
 export default function MenuAppBar({parent}) {
     const classes = useStyles();
@@ -65,15 +65,13 @@ export default function MenuAppBar({parent}) {
     const [regModel, openRegModal] = useState(false);
 
     const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
+        checkedA: false,
     });
 
     const handleThemeChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
-        useContext(PaletteProvider);
     };
-
+    const context = useContext(PaletteContext);
     return (
         <div className={classes.root}>
             <AppBar className={classes.appbar} position="static">
@@ -225,11 +223,13 @@ export default function MenuAppBar({parent}) {
                                     >
                                         <MenuItem onClick={()=>{}}>Информация для вещания</MenuItem>
                                         <MenuItem onClick={()=>{}}>Настройки</MenuItem>
-                                        <MenuItem>
-                                            <FormControlLabel
-                                                control={<Switch checked={state.checkedA} onChange={handleThemeChange} name="checkedA" />}
-                                            label="DARK mod"
-                                        /></MenuItem>
+
+                                        <Switch checked={true} onChange={(event) => {
+
+                                            context.toggleTheme();
+                                            setState({ ...state, [event.target.name]: event.target.checked });
+                                        }} name="checkedA"/>
+
                                         <MenuItem className={classes.logout}    onClick={()=>{setAuth(false);
                                                                                 cookie.set('isAuth', false);
                                                                                 parent.setState({isAuth: false})}}>
