@@ -9,7 +9,7 @@ import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
 
-export default function Chat() {
+export default function Chat({disabled}) {
     const classes = useStyles();
     const userName = 'blabla';
     const message = 'hi there';
@@ -31,10 +31,10 @@ export default function Chat() {
                         <Divider />
                         <Grid container style={{padding: '20px'}}>
                             <Grid item xs={11}>
-                                <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+                                <TextField disabled={disabled} id="outlined-basic-email" label="Type Something" fullWidth />
                             </Grid>
                             <Grid xs={1} align="right">
-                                <Fab color="primary" aria-label="add"><SendIcon /></Fab>
+                                <Fab disabled={disabled} color="primary" aria-label="add"><SendIcon /></Fab>
                             </Grid>
                         </Grid>
                     </Grid>
