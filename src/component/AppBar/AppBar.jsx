@@ -13,9 +13,9 @@ import {
 import {useStyles} from "./AppBarStyle";
 
 export default function MenuAppBar() {
-    const email = ''
-    const password = ''
-
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmedPassword, setConfirmedPassword] = useState('');
 
     const classes = useStyles();
     const [auth, setAuth] = useState(true);
@@ -23,8 +23,11 @@ export default function MenuAppBar() {
 
     const [openModal, setOpen] = useState(false);
 
+    const validateEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     const handleClickOpen = () => {
         setOpen(true);
+        clearFields();
     };
 
     const handleCloseModal = (isAuth) => {
@@ -40,10 +43,68 @@ export default function MenuAppBar() {
         setAnchorEl(event.currentTarget);
     };
 
+    const clearFields = () => {
+        setEmail('');
+        setPassword('');
+        setConfirmedPassword('');
+    }
+
+    const checkEmail = (email) => {
+        return validateEmail.test(email);
+    }
+
+    const [regModel, openRegModal] = useState(false);
+
     return (
         <div className={classes.root}>
             <AppBar className={classes.appbar} position="static">
                 <Toolbar>
+                    <Dialog open={regModel} onClose={() => {openRegModal(false)}} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title">Добро пожаловать на KEKW.tv</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Введите необходимые поля
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="email"
+                                label="Email Address"
+                                error={!checkEmail(email)}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                type="email"
+                                fullWidth
+                            />
+                            <TextField
+                                margin="dense"
+                                id="name"
+                                label="Password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                type="password"
+                                fullWidth
+                            />
+                            <TextField
+                                margin="dense"
+                                id="name"
+                                label="Confirm password"
+                                value={confirmedPassword}
+                                onChange={e => setConfirmedPassword(e.target.value)}
+                                type="password"
+                                fullWidth
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={()=>{openRegModal(false); clearFields();}} color="primary">
+                                Назад
+                            </Button>
+                            <Button onClick={()=>{openRegModal(false);}} color="primary">
+                                Зарегестрироваться
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+
                     <Typography variant="h4" className={classes.title}>
                         KEKW.tv
                     </Typography>
@@ -111,14 +172,17 @@ export default function MenuAppBar() {
                                                 margin="dense"
                                                 id="email"
                                                 label="Email Address"
+                                                onChange={e => setEmail(e.target.value)}
                                                 value={email}
                                                 type="email"
                                                 fullWidth
+                                                error={!checkEmail(email)}
                                             />
                                             <TextField
                                                 margin="dense"
                                                 id="name"
                                                 label="Password"
+                                                onChange={e => setPassword(e.target.value)}
                                                 value={password}
                                                 type="password"
                                                 fullWidth
@@ -131,7 +195,7 @@ export default function MenuAppBar() {
                                             <Button onClick={()=>{handleCloseModal(true)}} color="primary">
                                                 Войти
                                             </Button>
-                                            <Button onClick={()=>{handleCloseModal(false)}} color="primary">
+                                            <Button onClick={()=>{handleCloseModal(false); openRegModal(true);}} color="primary">
                                                 Зарегестрироваться
                                             </Button>
                                         </DialogActions>
