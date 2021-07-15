@@ -34,7 +34,7 @@ export default class App extends React.Component {
                         primary:  '#000000'
                     },
                     primary:{
-                        main: '#6175ad'
+                        main: '#3f50b6'
                     }
                 },
             }) :
@@ -49,10 +49,12 @@ export default class App extends React.Component {
                             active: '#ffffff',
                             disabled: '#8e8e8e',
                         },
-                        text:{                            primary:  '#a8a8a8'
+                        text:{
+                            primary:  '#a8a8a8'
                         },
                         primary:{
-                            main: '#747474'
+                            // main: '#747474'
+                            main: '#3f50b6'
                         }
                     },
 

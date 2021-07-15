@@ -169,10 +169,10 @@ export default function MenuAppBar({parent}) {
                             />
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={()=>{openRegModal(false); clearFields();}} color="primary">
+                            <Button variant="contained" onClick={()=>{openRegModal(false); clearFields();}} color="primary">
                                 Назад
                             </Button>
-                            <Button onClick={()=>{openRegModal(false);}} color="primary">
+                            <Button variant="contained" onClick={()=>{openRegModal(false);}} color="primary">
                                 Зарегестрироваться
                             </Button>
                         </DialogActions>
@@ -294,13 +294,13 @@ export default function MenuAppBar({parent}) {
                                             />
                                         </DialogContent>
                                         <DialogActions>
-                                            <Button onClick={()=>{handleCloseModal(false)}} color="primary">
+                                            <Button variant="contained" onClick={()=>{handleCloseModal(false)}} color="primary">
                                                 Назад
                                             </Button>
-                                            <Button onClick={()=>{handleCloseModal(true)}} color="primary">
+                                            <Button variant="contained" onClick={()=>{handleCloseModal(true)}} color="primary">
                                                 Войти
                                             </Button>
-                                            <Button onClick={()=>{handleCloseModal(false); openRegModal(true);}} color="primary">
+                                            <Button variant="contained" onClick={()=>{handleCloseModal(false); openRegModal(true);}} color="primary">
                                                 Зарегестрироваться
                                             </Button>
                                         </DialogActions>
