@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
+import Typography from "@material-ui/core/Typography";
 
 export default function Chat({disabled}) {
     const classes = useStyles();
@@ -16,21 +17,37 @@ export default function Chat({disabled}) {
     const [messagesList, addMessage] = useState([]);
     const [messages, saveMessage] = useState('');
 
+    let index = 1;
+
     const sandMessage = () => {
         if (!messages.length)
             return;
 
+        console.log(messagesList);
+
         addMessage([
             ...messagesList,
-            (<ListItem key="1">
+            (<ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
                 <Grid container>
                     <Grid item xs={12}>
-                        <ListItemText align="right" primary={messages} secondary={`By ${userName}`} />
+                        <ListItemText
+                            style={{ wordWrap: 'normal'}}
+                            align="left"
+                            primary={
+                                <div>
+                                    <span
+                                        style={{color: `#${Math.floor(Math.random()*1677215).toString(16)}`}}>
+                                        {userName}
+                                    </span>: {messages}
+                                </div>
+                            }
+                        />
                     </Grid>
                 </Grid>
             </ListItem>)
         ]);
         saveMessage('');
+        index++;
     }
 
     const scrollRef = useRef(null)
