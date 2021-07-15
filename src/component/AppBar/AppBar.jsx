@@ -10,11 +10,11 @@ import {
     Button, IconButton,
     DialogContentText, DialogContent,
     DialogActions, DialogTitle, Dialog,
-    TextField, FormControlLabel, Switch
+    TextField, Switch
 } from '@material-ui/core';
 
 import {useStyles} from "./AppBarStyle";
-import { PaletteContext, themes } from '../../palette/PaletteContext';
+import { PaletteContext } from '../../palette/PaletteContext';
 
 export default function MenuAppBar({parent}) {
     const classes = useStyles();
@@ -65,13 +65,16 @@ export default function MenuAppBar({parent}) {
     const [regModel, openRegModal] = useState(false);
 
     const [state, setState] = React.useState({
-        checkedA: false,
+        checkedA: false
     });
 
     const handleThemeChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
+
     const context = useContext(PaletteContext);
+
+
     return (
         <div className={classes.root}>
             <AppBar className={classes.appbar} position="static">
@@ -224,12 +227,13 @@ export default function MenuAppBar({parent}) {
                                         <MenuItem onClick={()=>{}}>Информация для вещания</MenuItem>
                                         <MenuItem onClick={()=>{}}>Настройки</MenuItem>
 
-                                        <Switch checked={true} onChange={(event) => {
-
-                                            context.toggleTheme();
-                                            setState({ ...state, [event.target.name]: event.target.checked });
-                                        }} name="checkedA"/>
-
+                                        <MenuItem >
+                                            <Switch checked={state.checkedA} onChange={(event) => {
+                                                context.toggleTheme();
+                                                setState({ ...state, [event.target.name]: event.target.checked });
+                                            }}  name="checkedA"/>
+                                            Dark mode
+                                        </MenuItem>
                                         <MenuItem className={classes.logout}    onClick={()=>{setAuth(false);
                                                                                 cookie.set('isAuth', false);
                                                                                 parent.setState({isAuth: false})}}>
