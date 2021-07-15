@@ -31,7 +31,7 @@ export default function Chat({disabled}) {
                 <Grid container>
                     <Grid item xs={12}>
                         <ListItemText
-                            style={{ wordWrap: 'normal'}}
+                            style={{ wordWrap: 'break-word'}}
                             align="left"
                             primary={
                                 <div>
