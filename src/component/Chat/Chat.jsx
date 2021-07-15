@@ -36,7 +36,7 @@ export default function Chat({disabled}) {
                             primary={
                                 <div>
                                     <span
-                                        style={{color: `#${Math.floor(Math.random()*1677215).toString(16)}`}}>
+                                        style={{color: `#${((1<<24)*Math.random() | 0).toString(16)}`}}>
                                         {userName}
                                     </span>: {messages}
                                 </div>
