@@ -10,6 +10,8 @@ import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
 import Typography from "@material-ui/core/Typography";
 
+import socket from '../../endpoint/socket';
+
 export default function Chat({disabled}) {
     const classes = useStyles();
     const userName = 'blabla';
@@ -19,32 +21,51 @@ export default function Chat({disabled}) {
 
     let index = 1;
 
+    const createMessageView = (author, data) => (
+        <ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
+            <Grid container>
+                <Grid item xs={12}>
+                    <ListItemText
+                        style={{ wordWrap: 'break-word'}}
+                        align="left"
+                        primary={
+                            <div>
+                                <span
+                                    style={{color: `#${((1<<24)*Math.random() | 0).toString(16)}`}}>
+                                    {author}
+                                </span>: {data}
+                            </div>
+                        }
+                    />
+                </Grid>
+            </Grid>
+        </ListItem>
+    );
+
+    socket.on('receivedMessage', message => {
+        addMessage([
+            ...messagesList,
+            createMessageView(message.author, message.content)
+        ]);
+    })
+
     const sandMessage = () => {
         if (!messages.length)
             return;
 
         console.log(messagesList);
 
+        const message = {
+            author: userName,
+            content: messages,
+            date: new Date()
+        }
+
+        socket.emit('sendMessage', message);
+
         addMessage([
             ...messagesList,
-            (<ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <ListItemText
-                            style={{ wordWrap: 'break-word'}}
-                            align="left"
-                            primary={
-                                <div>
-                                    <span
-                                        style={{color: `#${((1<<24)*Math.random() | 0).toString(16)}`}}>
-                                        {userName}
-                                    </span>: {messages}
-                                </div>
-                            }
-                        />
-                    </Grid>
-                </Grid>
-            </ListItem>)
+            createMessageView(userName, messages)
         ]);
         saveMessage('');
         index++;
