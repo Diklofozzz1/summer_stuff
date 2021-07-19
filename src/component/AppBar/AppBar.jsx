@@ -16,7 +16,14 @@ import {
 import {useStyles} from "./AppBarStyle";
 import { PaletteContext } from '../../palette/PaletteContext';
 
-export default function MenuAppBar({parent}) {
+
+export const StreamNameContext = React.createContext({
+    streamName: '',
+    setStremName: (value)=>{},
+});
+
+
+export function MenuAppBar({parent}) {
     const classes = useStyles();
 
     const [email, setEmail] = useState('');
@@ -24,10 +31,13 @@ export default function MenuAppBar({parent}) {
     const [username, setUsername] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
     const [showPass, showPassword] = useState(false);
+    const [showKey,showStreamKey] = useState(false);
     const [showConfPass, showConfirmedPass] = useState(false);
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [openModal, setOpen] = useState(false);
+    const [streamKey, setStreamKey] = useState('feauwpFIhfosekJFpuiohsEFNPOHSUIFHjkshhknfihsejiFHNujfhnjsnuopHOSHfuioehkljsOIUFGHEJI');
+
 
     const validateEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -73,6 +83,8 @@ export default function MenuAppBar({parent}) {
     };
 
     const context = useContext(PaletteContext);
+
+    const [infoModal, openInfoModal] = useState(false);
 
 
     return (
@@ -178,6 +190,70 @@ export default function MenuAppBar({parent}) {
                         </DialogActions>
                     </Dialog>
 
+                    <Dialog maxWidth={'md'} open={infoModal} onClose={() => {openInfoModal(false)}} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title">Спасибо, что выбираете KEKW.tv</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                В данном окне сообщается информация для успешного вещания на нашей площадке.
+                                Убедительная просьба <b style={{color: 'red'}}>НИКОМУ НЕ СООБЩАЙТЕ</b> информацию,
+                                предоставленную в данном окне!
+                                <TextField
+                                    margin="dense"
+                                    id="name"
+                                    label='Ваш стрим ключ:'
+                                    value={streamKey}
+                                    type= {showKey ? '': 'password'}
+                                    fullWidth
+                                    InputProps={{
+                                        readOnly: true,
+                                        endAdornment: showKey ?
+                                            <IconButton
+                                                aria-label="account of current user"
+                                                aria-controls="menu-appbar"
+                                                aria-haspopup="true"
+                                                onClick={() => {showStreamKey(false)}}
+                                                children={<Visibility />}
+                                                color="inherit" />
+                                            :
+                                            <IconButton
+                                                aria-label="account of current user"
+                                                aria-controls="menu-appbar"
+                                                aria-haspopup="true"
+                                                onClick={() => {showStreamKey(true)}}
+                                                children={<VisibilityOff />}
+                                                color="inherit" />
+                                    }}
+                                />
+
+                            </DialogContentText>
+
+                            <DialogContentText>
+                               Скажите, что вы соираетесь стримить:
+                               <StreamNameContext.Consumer>
+                                   {({streamName, setStreamName}) => (
+                                       <TextField
+                                           margin="dense"
+                                           id="name"
+                                           label="stream name (less then 50 characters)"
+                                           value={streamName}
+                                           error={streamName.length > 50}
+                                           onChange={e => setStreamName(e.target.value)}
+                                           type= {'string'}
+                                           fullWidth
+                                       />
+                                   )}
+                               </StreamNameContext.Consumer>
+                            </DialogContentText>
+
+                        </DialogContent>
+                        <DialogActions>
+                            <Button variant="contained" onClick={()=>{openInfoModal(false)}} color="primary">
+                                Назад
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+
+
                     <Typography variant="h4" className={classes.title}>
                         KEKW.tv
                     </Typography>
@@ -224,8 +300,9 @@ export default function MenuAppBar({parent}) {
                                         open={Boolean(anchorEl)}
                                         onClose={()=>{setAnchorEl(undefined)}}
                                     >
-                                        <MenuItem onClick={()=>{}}>Информация для вещания</MenuItem>
-                                        <MenuItem onClick={()=>{}}>Настройки</MenuItem>
+                                        <MenuItem onClick={()=>{openInfoModal(true)}}>Информация для вещания</MenuItem>
+
+                                        {/*<MenuItem onClick={()=>{}}>Настройки</MenuItem>*/}
 
                                         <MenuItem >
                                             <Switch checked={state.checkedA} onChange={(event) => {

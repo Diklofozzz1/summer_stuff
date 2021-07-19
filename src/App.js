@@ -54,7 +54,7 @@ export default class App extends React.Component {
                         },
                         primary:{
                             // main: '#747474'
-                            main: '#3f50b6'
+                            main: '#3f50b6',
                         }
                     },
 
