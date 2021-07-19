@@ -2,6 +2,7 @@ import React from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import qs from 'qs';
 
 import {cookie} from "../../endpoint/cookie";
 
@@ -12,8 +13,6 @@ import Chat from "../../component/Chat/Chat";
 
 
 export default class StreamPage extends React.Component {
-
-
     constructor(props) {
         super(props);
 
@@ -24,16 +23,14 @@ export default class StreamPage extends React.Component {
         }
 
         this.state = {
-            userName: cookie.get('username'),
+            userName: cookie.get('username') || qs.parse(this.props.location.search, {ignoreQueryPrefix: true}).streamer,
             streamName: '',
             setStreamName: this.setStreamName,
             isAuth: true,
         }
     }
 
-
     render() {
-
         return(
             <div>
                 <StreamNameContext.Provider value = {this.state}>
