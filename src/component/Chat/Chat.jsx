@@ -21,6 +21,19 @@ export default function Chat({disabled}) {
 
     let index = 1;
 
+    socket.onmessage = e => {
+        const data = JSON.parse(e.data);
+
+        addMessage([
+            ...messagesList,
+            createMessageView(data.username, data.message)
+        ]);
+    }
+
+    socket.onclose = _ => {
+        console.log('Disconnect');
+    }
+
     const createMessageView = (author, data) => (
         <ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
             <Grid container>
@@ -42,26 +55,17 @@ export default function Chat({disabled}) {
         </ListItem>
     );
 
-    socket.on('receivedMessage', message => {
-        addMessage([
-            ...messagesList,
-            createMessageView(message.author, message.content)
-        ]);
-    })
-
     const sandMessage = () => {
         if (!messages.length)
             return;
 
-        console.log(messagesList);
+        socket.send(JSON.stringify({
+            message: messages,
+            username: 'admin',
+            channel: 1
+        }));
 
-        const message = {
-            author: userName,
-            content: messages,
-            date: new Date()
-        }
-
-        socket.emit('sendMessage', message);
+        // socket.emit('sendMessage', message);
 
         addMessage([
             ...messagesList,
