@@ -10,7 +10,7 @@ import {
     Button, IconButton,
     DialogContentText, DialogContent,
     DialogActions, DialogTitle, Dialog,
-    TextField, Switch
+    TextField, Switch, Link
 } from '@material-ui/core';
 
 import {useStyles} from "./AppBarStyle";
@@ -260,7 +260,15 @@ export function MenuAppBar({parent}) {
                     <div className={classes.appbar_buttons_group}>
                         <div className={classes.appbar_buttons}>
                             <Typography variant="h7">
-                                <MenuItem>Трансляции онлайн</MenuItem>
+                                <a href='/' style={{
+                                    cursor: 'default',
+                                    textDecoration: 'none',
+                                    color: 'white'}}>
+                                    <MenuItem>
+                                    Трансляции онлайн
+                                    </MenuItem>
+                                </a>
+
                             </Typography>
                         </div>
                         {auth &&(
