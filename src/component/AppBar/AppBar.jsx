@@ -41,11 +41,7 @@ export function MenuAppBar({parent}) {
     const [openModal, setOpen] = useState(false);
     const [streamKey, setStreamKey] = useState('feauwpFIhfosekJFpuiohsEFNPOHSUIFHjkshhknfihsejiFHNujfhnjsnuopHOSHfuioehkljsOIUFGHEJI');
 
-    console.log(!!cookie.get('isAuth'));
-    console.log(typeof (cookie.get('isAuth')));
-
     const validateEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -89,6 +85,7 @@ export function MenuAppBar({parent}) {
                     if (response.status === 200) {
                         setAuth(true)
                         cookie.set('isAuth', true);
+                        cookie.set('username', username);
                         setAnchorEl(null);
                         parent.setState({isAuth: true});
                         setUsername(username);

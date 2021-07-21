@@ -24,6 +24,10 @@ export default function Chat({disabled}) {
 
     try{
         socket.onmessage = e => {
+            if (e.data.username===userName){
+                return;
+            }
+            console.log('!!!!!!!!!!!!!!');
             const data = JSON.parse(e.data);
 
             addMessage([
@@ -66,16 +70,10 @@ export default function Chat({disabled}) {
         try{
             socket.send(JSON.stringify({
                 message: messages,
-                username: 'admin',
+                username: userName,
                 channel: 1
             }));
 
-            // socket.emit('sendMessage', message);
-
-            addMessage([
-                ...messagesList,
-                createMessageView(userName, messages)
-            ]);
             saveMessage('');
             index++;
         }catch (_){}
