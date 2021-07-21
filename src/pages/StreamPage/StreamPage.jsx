@@ -3,11 +3,12 @@ import { Redirect } from 'react-router-dom'
 import { Avatar, Typography, Button } from '@material-ui/core';
 import qs from 'qs';
 
-import { cookie } from '../../endpoint/cookie';
+// import { cookie } from '../../endpoint/cookie';
 
 import { MenuAppBar, StreamNameContext } from '../../component/AppBar/AppBar';
 import PLayer from '../../component/PLayer/PLayer';
 import Chat from '../../component/Chat/Chat';
+import {cookie} from "../../endpoint/cookie";
 
 
 export default class StreamPage extends React.Component {
@@ -20,18 +21,18 @@ export default class StreamPage extends React.Component {
             })
         }
 
-        this.streamerName = qs.parse(this.props.location.search, {ignoreQueryPrefix: true}).streamer;
-
         this.state = {
-            userName: cookie.get('username') || this.streamerName,
+            userName: this.props.match.params.streamer,
             streamName: '',
             setStreamName: this.setStreamName,
-            isAuth: true,
+            isAuth: cookie.get('isAuth') === 'true',
         }
     }
 
     render() {
-        if (!this.state.userName.length) {
+        console.log(this.state.userName);
+
+        if (!this.state.userName) {
             return <Redirect to='/error?error=404' />
         }
 

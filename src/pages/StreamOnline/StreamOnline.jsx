@@ -10,12 +10,16 @@ import StreamCard from '../../component/StreamCard/StreamCard'
 export default class StreamPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {cards: []}
+        this.state = {
+            cards: [],
+            isAuth: true,
+        }
     }
+
     async componentDidMount(){
         let cards = []
-        for(let i=0; i<10; i++){
-            cards.push(<StreamCard userName={'huila'+i} streamName={'balbalblablablabl'} />)
+        for(let i=0; i<1; i++){
+            cards.push(<StreamCard userName={'huila'+i} streamName={'balbalblablablabl'}/>)
         }
         this.setState({
             cards: cards

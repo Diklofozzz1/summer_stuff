@@ -9,7 +9,7 @@ const Routes = () => {
     return(
         <BrowserRouter>
             <Switch>
-                <Route path='/stream' component={StreamPage} />
+                <Route path='/stream/:streamer?' component={StreamPage} />
                 <Route path='/error' component={ErrorPage} />
                 <Route path='/' component={StreamOnline}/>
                 {/*<Route path='/govno' component={StreamPage} />*/}

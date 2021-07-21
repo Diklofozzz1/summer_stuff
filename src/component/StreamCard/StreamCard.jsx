@@ -30,11 +30,6 @@ export default function StreamCard({userName, streamName}) {
                     </Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
-                <Button variant="contained" size="small" color="primary">
-                    Подписаться
-                </Button>
-            </CardActions>
         </Card>
     );
 }

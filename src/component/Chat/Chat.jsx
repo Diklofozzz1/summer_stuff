@@ -11,28 +11,32 @@ import {useStyles} from "./ChatStyle";
 import Typography from "@material-ui/core/Typography";
 
 import socket from '../../endpoint/socket';
+import {cookie} from "../../endpoint/cookie";
 
 export default function Chat({disabled}) {
     const classes = useStyles();
-    const userName = 'blabla';
+    const userName = cookie.get('username');
 
     const [messagesList, addMessage] = useState([]);
     const [messages, saveMessage] = useState('');
 
     let index = 1;
 
-    socket.onmessage = e => {
-        const data = JSON.parse(e.data);
+    try{
+        socket.onmessage = e => {
+            const data = JSON.parse(e.data);
 
-        addMessage([
-            ...messagesList,
-            createMessageView(data.username, data.message)
-        ]);
-    }
+            addMessage([
+                ...messagesList,
+                createMessageView(data.username, data.message)
+            ]);
+        }
 
-    socket.onclose = _ => {
-        console.log('Disconnect');
-    }
+        socket.onclose = _ => {
+            console.log('Disconnect');
+        }
+    } catch(_){ }
+
 
     const createMessageView = (author, data) => (
         <ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
@@ -56,23 +60,25 @@ export default function Chat({disabled}) {
     );
 
     const sandMessage = () => {
-        if (!messages.length)
+        if (!messages.length || !userName.length)
             return;
 
-        socket.send(JSON.stringify({
-            message: messages,
-            username: 'admin',
-            channel: 1
-        }));
+        try{
+            socket.send(JSON.stringify({
+                message: messages,
+                username: 'admin',
+                channel: 1
+            }));
 
-        // socket.emit('sendMessage', message);
+            // socket.emit('sendMessage', message);
 
-        addMessage([
-            ...messagesList,
-            createMessageView(userName, messages)
-        ]);
-        saveMessage('');
-        index++;
+            addMessage([
+                ...messagesList,
+                createMessageView(userName, messages)
+            ]);
+            saveMessage('');
+            index++;
+        }catch (_){}
     }
 
     const scrollRef = useRef(null)
