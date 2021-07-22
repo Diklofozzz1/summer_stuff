@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 
 import {cookie} from "../../endpoint/cookie";
 
-import {apiLog, apiReg} from "../../api/api";
+import {apiLog, apiReg, apiStreamKey} from "../../api/api";
 
 import {AccountCircle, Visibility, VisibilityOff} from '@material-ui/icons';
 
@@ -39,7 +39,8 @@ export function MenuAppBar({parent}) {
     const [auth, setAuth] = useState(cookie.get('isAuth') === 'true');
     const [anchorEl, setAnchorEl] = useState(null);
     const [openModal, setOpen] = useState(false);
-    const [streamKey, setStreamKey] = useState('feauwpFIhfosekJFpuiohsEFNPOHSUIFHjkshhknfihsejiFHNujfhnjsnuopHOSHfuioehkljsOIUFGHEJI');
+    const [streamKey, setStreamKey] = useState('');
+    const [streamServerName, setStreamServerName] = useState('');
 
     const validateEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -47,6 +48,26 @@ export function MenuAppBar({parent}) {
         setOpen(true);
         clearFields();
     };
+
+    let apiKeyPromise = null;
+
+    const handleStreamKey = () => {
+        if (!apiKeyPromise && !streamKey.length){
+            apiKeyPromise = apiStreamKey(username);
+            apiKeyPromise.then((response) =>{
+                if(response.data.detail === 200){
+                    const _streamKey = response.data.privateStreamKey.substring(7).split('/')
+                    // setStreamKey(_streamKey[2]);
+                    setStreamServerName(`rtmp://${_streamKey[0]}/${_streamKey[1]}/`)
+                } else {
+                    alert('Нет такого пользователя');
+                }
+            }).catch((error) => {
+                alert('Сервер не отвечает!');
+                console.log(error);
+            })
+        }
+    }
 
     const handleCloseModal = () => {
         apiLog(username, password).then((response) => {
@@ -60,6 +81,9 @@ export function MenuAppBar({parent}) {
             } else {
                 alert('Ошибка авторизации!');
             }
+        }).catch((error) => {
+            alert('Сервер не отвечает!');
+            console.log(error);
         })
         setOpen(false);
     };
@@ -116,6 +140,10 @@ export function MenuAppBar({parent}) {
 
     const [infoModal, openInfoModal] = useState(false);
 
+    if(!streamKey.length){
+        handleStreamKey();
+        console.log('1');
+    }
 
     return (
         <div className={classes.root}>
@@ -247,7 +275,18 @@ export function MenuAppBar({parent}) {
                                 <TextField
                                     margin="dense"
                                     id="name"
-                                    label='Ваш стрим ключ:'
+                                    label='Сервер для вещания:'
+                                    value={streamServerName}
+                                    type={'string'}
+                                    fullWidth
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    margin="dense"
+                                    id="name"
+                                    label='Ваш ключ потока:'
                                     value={streamKey}
                                     type={showKey ? '' : 'password'}
                                     fullWidth

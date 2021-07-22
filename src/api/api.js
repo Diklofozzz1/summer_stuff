@@ -26,7 +26,7 @@ export function apiLog(username, password){
 export function apiStreamKey(username){
     return axios({
         method: 'post',
-        url: 'http://privetdima.xyz:8000/api/streamkey/',
+        url: 'http://privetdima.xyz:8000/api/streamkey',
         data: {
             username: username,
         }
