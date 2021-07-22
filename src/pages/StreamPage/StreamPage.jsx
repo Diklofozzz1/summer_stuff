@@ -1,9 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
 import { Avatar, Typography, Button } from '@material-ui/core';
-import qs from 'qs';
-
-// import { cookie } from '../../endpoint/cookie';
 
 import { MenuAppBar, StreamNameContext } from '../../component/AppBar/AppBar';
 import PLayer from '../../component/PLayer/PLayer';
@@ -29,9 +26,10 @@ export default class StreamPage extends React.Component {
         }
     }
 
-    render() {
-        console.log(this.state.userName);
 
+    render() {
+        console.log(`streamPage: ${cookie.get('username')}`);
+        console.log(`streamPageAuth: ${cookie.get('isAuth')}`);
         if (!this.state.userName) {
             return <Redirect to='/error?error=404' />
         }

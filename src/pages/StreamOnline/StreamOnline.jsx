@@ -5,6 +5,7 @@ import {IconButton} from "@material-ui/core";
 
 import { MenuAppBar } from '../../component/AppBar/AppBar';
 import StreamCard from '../../component/StreamCard/StreamCard'
+import {cookie} from "../../endpoint/cookie";
 
 
 export default class StreamPage extends React.Component {
@@ -12,7 +13,6 @@ export default class StreamPage extends React.Component {
         super(props);
         this.state = {
             cards: [],
-            isAuth: true,
         }
     }
 
@@ -28,6 +28,9 @@ export default class StreamPage extends React.Component {
 
 
     render(){
+        console.log(`streamOnline: ${cookie.get('username')}`);
+        console.log(`streamOnlineAuth: ${cookie.get('isAuth')}`);
+
         return(
             <div>
                 <MenuAppBar parent = {this} />

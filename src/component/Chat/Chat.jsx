@@ -8,8 +8,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
-import Typography from "@material-ui/core/Typography";
-
 import socket from '../../endpoint/socket';
 import {cookie} from "../../endpoint/cookie";
 

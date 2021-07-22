@@ -1,9 +1,5 @@
 import {makeStyles} from "@material-ui/core/styles";
 
-const colorSpectrum = {
-    lightBlue: ''
-}
-
 export const useStyles = makeStyles((theme) => ({
     chatSection: {
         display: "inline-block",

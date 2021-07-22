@@ -49,15 +49,13 @@ export function MenuAppBar({parent}) {
         clearFields();
     };
 
-    let apiKeyPromise = null;
+
 
     const handleStreamKey = () => {
-        if (!apiKeyPromise && !streamKey.length){
-            apiKeyPromise = apiStreamKey(username);
-            apiKeyPromise.then((response) =>{
+       apiStreamKey(username).then((response) =>{
                 if(response.data.detail === 200){
                     const _streamKey = response.data.privateStreamKey.substring(7).split('/')
-                    // setStreamKey(_streamKey[2]);
+                    setStreamKey(_streamKey[2]);
                     setStreamServerName(`rtmp://${_streamKey[0]}/${_streamKey[1]}/`)
                 } else {
                     alert('Нет такого пользователя');
@@ -65,25 +63,23 @@ export function MenuAppBar({parent}) {
             }).catch((error) => {
                 alert('Сервер не отвечает!');
                 console.log(error);
-            })
-        }
+        })
     }
+
 
     const handleCloseModal = () => {
         apiLog(username, password).then((response) => {
             if (response.status === 200) {
-                setAuth(true)
-                cookie.set('isAuth', true);
-                cookie.set('username', username);
-                setAnchorEl(null);
-                parent.setState({isAuth: true});
+                setAuth(true);
+                parent.cookie.set('isAuth', true);
                 setUsername(username);
-            } else {
-                alert('Ошибка авторизации!');
+                parent.cookie.set('username', username);
+                parent.setState({isAuth: true});
+                setAnchorEl(null);
             }
         }).catch((error) => {
-            alert('Сервер не отвечает!');
-            console.log(error);
+            alert('Нет такого пользователя!');
+            console.log(error)
         })
         setOpen(false);
     };
@@ -112,7 +108,7 @@ export function MenuAppBar({parent}) {
                         cookie.set('username', username);
                         setAnchorEl(null);
                         parent.setState({isAuth: true});
-                        setUsername(username);
+                        // setUsername(username);
                     } else {
                         alert('Ошибка авторизации!');
                     }
@@ -139,11 +135,6 @@ export function MenuAppBar({parent}) {
     const context = useContext(PaletteContext);
 
     const [infoModal, openInfoModal] = useState(false);
-
-    if(!streamKey.length){
-        handleStreamKey();
-        console.log('1');
-    }
 
     return (
         <div className={classes.root}>
@@ -405,7 +396,7 @@ export function MenuAppBar({parent}) {
                                     >
                                         <MenuItem disabled={true}>В системе под именем: {username}</MenuItem>
                                         <MenuItem onClick={() => {
-                                            openInfoModal(true)
+                                            openInfoModal(true); handleStreamKey()
                                         }}>Информация для вещания</MenuItem>
 
                                         {/*<MenuItem onClick={()=>{}}>Настройки</MenuItem>*/}
@@ -420,6 +411,7 @@ export function MenuAppBar({parent}) {
                                         <MenuItem className={classes.logout} onClick={() => {
                                             setAuth(false);
                                             cookie.set('isAuth', false);
+                                            // setUsername('');
                                             cookie.set('username', '');
                                             parent.setState({isAuth: false})
                                         }}>
