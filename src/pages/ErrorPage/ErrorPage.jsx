@@ -1,7 +1,6 @@
 import React from "react";
 import { MenuAppBar } from '../../component/AppBar/AppBar';
 import qs from 'qs';
-import {cookie} from "../../endpoint/cookie";
 
 const errors = {
     401: {
@@ -24,9 +23,6 @@ export default function ErrorPage(props) {
     } catch(_) {
         errorDescription = 'Uuups... Something went wrong! Sorry'
     }
-
-    console.log(`errorPage: ${cookie.get('username')}`);
-    console.log(`errorPageAuth: ${cookie.get('isAuth')}`);
 
     return (
         <div>

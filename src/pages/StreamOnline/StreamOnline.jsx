@@ -5,7 +5,7 @@ import {IconButton} from "@material-ui/core";
 
 import { MenuAppBar } from '../../component/AppBar/AppBar';
 import StreamCard from '../../component/StreamCard/StreamCard'
-import {cookie} from "../../endpoint/cookie";
+import {apiStreamPool} from "../../api/api";
 
 
 export default class StreamPage extends React.Component {
@@ -18,19 +18,24 @@ export default class StreamPage extends React.Component {
 
     async componentDidMount(){
         let cards = []
-        for(let i=0; i<1; i++){
-            cards.push(<StreamCard userName={'huila'+i} streamName={'balbalblablablabl'}/>)
-        }
-        this.setState({
-            cards: cards
+
+        apiStreamPool().then((response)=>{
+            let _data = response.data;
+            for(let key in _data){
+                if (_data.hasOwnProperty(key)){
+                    cards.push(<StreamCard userName={key} streamName={_data[key][1]}/>);
+                }
+            }
+            this.setState({
+                cards: cards
+            });
+        }).catch(err => {
+            console.log(err);
         })
     }
 
 
     render(){
-        console.log(`streamOnline: ${cookie.get('username')}`);
-        console.log(`streamOnlineAuth: ${cookie.get('isAuth')}`);
-
         return(
             <div>
                 <MenuAppBar parent = {this} />
@@ -53,7 +58,8 @@ export default class StreamPage extends React.Component {
                                                 flexWrap: "wrap",
                                                 justifyContent:'center',
                                                 alignItems:'center',}}>
-                    {this.state.cards}
+                    {this.state.cards.length ? this.state.cards : 'Нет доступных стримов или попробуйте отключить AddBlock'}
+
                 </div>
 
             </div>

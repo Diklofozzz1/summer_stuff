@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const template = '';
+
 export function apiReg(username, email, password){
     return axios({
         method: 'POST',

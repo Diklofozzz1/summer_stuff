@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 
 import {cookie} from "../../endpoint/cookie";
 
-import {apiLog, apiReg, apiStreamKey} from "../../api/api";
+import {apiLog, apiReg, apiStreamKey, apiStreamName} from "../../api/api";
 
 import {AccountCircle, Visibility, VisibilityOff} from '@material-ui/icons';
 
@@ -17,13 +17,6 @@ import {
 
 import {useStyles} from "./AppBarStyle";
 import {PaletteContext} from '../../palette/PaletteContext';
-
-
-export const StreamNameContext = React.createContext({
-    streamName: '',
-    setStremName: (value) => {
-    },
-});
 
 
 export function MenuAppBar({parent}) {
@@ -41,6 +34,7 @@ export function MenuAppBar({parent}) {
     const [openModal, setOpen] = useState(false);
     const [streamKey, setStreamKey] = useState('');
     const [streamServerName, setStreamServerName] = useState('');
+    const [streamName, setStreamName] = useState('');
 
     const validateEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -49,37 +43,31 @@ export function MenuAppBar({parent}) {
         clearFields();
     };
 
-
-
     const handleStreamKey = () => {
-       apiStreamKey(username).then((response) =>{
-                if(response.data.detail === 200){
-                    const _streamKey = response.data.privateStreamKey.substring(7).split('/')
-                    setStreamKey(_streamKey[2]);
-                    setStreamServerName(`rtmp://${_streamKey[0]}/${_streamKey[1]}/`)
-                } else {
-                    alert('Нет такого пользователя');
-                }
-            }).catch((error) => {
-                alert('Сервер не отвечает!');
-                console.log(error);
+        apiStreamKey(username).then((response) => {
+            if (response.data.detail === 200) {
+                const _streamKey = response.data.privateStreamKey.substring(7).split('/')
+                setStreamKey(_streamKey[2]);
+                setStreamServerName(`rtmp://${_streamKey[0]}/${_streamKey[1]}/`)
+            } else {
+                alert('Нет такого пользователя');
+            }
+        }).catch((error) => {
+            alert('Сервер не отвечает!');
+            console.log(error);
         })
     }
-
 
     const handleCloseModal = () => {
         apiLog(username, password).then((response) => {
             if (response.status === 200) {
                 setAuth(true);
-                parent.cookie.set('isAuth', true);
+                cookie.set('isAuth', true, {path: '/'});
                 setUsername(username);
-                parent.cookie.set('username', username);
+                cookie.set('username', username, {path: '/'});
                 parent.setState({isAuth: true});
                 setAnchorEl(null);
             }
-        }).catch((error) => {
-            alert('Нет такого пользователя!');
-            console.log(error)
         })
         setOpen(false);
     };
@@ -104,8 +92,8 @@ export function MenuAppBar({parent}) {
                 apiLog(username, password).then((response) => {
                     if (response.status === 200) {
                         setAuth(true)
-                        cookie.set('isAuth', true);
-                        cookie.set('username', username);
+                        cookie.set('isAuth', true, {path: '/'});
+                        cookie.set('username', username, {path: '/'});
                         setAnchorEl(null);
                         parent.setState({isAuth: true});
                         // setUsername(username);
@@ -310,20 +298,16 @@ export function MenuAppBar({parent}) {
 
                             <DialogContentText>
                                 Скажите, что вы соираетесь стримить:
-                                <StreamNameContext.Consumer>
-                                    {({streamName, setStreamName}) => (
-                                        <TextField
-                                            margin="dense"
-                                            id="name"
-                                            label="stream name (less then 50 characters)"
-                                            value={streamName}
-                                            error={streamName.length > 50}
-                                            onChange={e => setStreamName(e.target.value)}
-                                            type={'string'}
-                                            fullWidth
-                                        />
-                                    )}
-                                </StreamNameContext.Consumer>
+                                <TextField
+                                    margin="dense"
+                                    id="name"
+                                    label="stream name (more then 50 characters or less then 5)"
+                                    value={streamName}
+                                    error={streamName.length > 50 || streamName.length < 5}
+                                    onChange={e => setStreamName(e.target.value)}
+                                    type={'string'}
+                                    fullWidth
+                                />
                             </DialogContentText>
 
                         </DialogContent>
@@ -332,6 +316,16 @@ export function MenuAppBar({parent}) {
                                 openInfoModal(false)
                             }} color="primary">
                                 Назад
+                            </Button>
+                            <Button variant="contained" onClick={() => {
+                                openInfoModal(false);
+                                apiStreamName(username, streamName).then(_ => {
+                                    alert('Название стрима успешно установлено!');
+                                }).catch(err => {
+                                    console.warn('Cant update stream name', err);
+                                })
+                            }} color="primary">
+                                Подтвердить
                             </Button>
                         </DialogActions>
                     </Dialog>
@@ -396,7 +390,8 @@ export function MenuAppBar({parent}) {
                                     >
                                         <MenuItem disabled={true}>В системе под именем: {username}</MenuItem>
                                         <MenuItem onClick={() => {
-                                            openInfoModal(true); handleStreamKey()
+                                            openInfoModal(true);
+                                            handleStreamKey()
                                         }}>Информация для вещания</MenuItem>
 
                                         {/*<MenuItem onClick={()=>{}}>Настройки</MenuItem>*/}
@@ -410,9 +405,10 @@ export function MenuAppBar({parent}) {
                                         </MenuItem>
                                         <MenuItem className={classes.logout} onClick={() => {
                                             setAuth(false);
-                                            cookie.set('isAuth', false);
+                                            console.log('log out event')
+                                            cookie.set('isAuth', false, {path: '/'});
                                             // setUsername('');
-                                            cookie.set('username', '');
+                                            cookie.set('username', '', {path: '/'});
                                             parent.setState({isAuth: false})
                                         }}>
                                             Выйти

@@ -8,10 +8,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
-import socket from '../../endpoint/socket';
 import {cookie} from "../../endpoint/cookie";
 
-export default function Chat({disabled}) {
+export default function Chat({disabled, streamer}) {
     const classes = useStyles();
     const userName = cookie.get('username');
 
@@ -20,12 +19,14 @@ export default function Chat({disabled}) {
 
     let index = 1;
 
+    const socket = new WebSocket(`ws://90.188.92.68:65000/ws/${streamer}/`);
+
     try{
         socket.onmessage = e => {
             if (e.data.username===userName){
                 return;
             }
-            console.log('!!!!!!!!!!!!!!');
+
             const data = JSON.parse(e.data);
 
             addMessage([
@@ -33,6 +34,7 @@ export default function Chat({disabled}) {
                 createMessageView(data.username, data.message)
             ]);
         }
+
 
         socket.onclose = _ => {
             console.log('Disconnect');
