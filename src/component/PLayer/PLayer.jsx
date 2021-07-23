@@ -19,9 +19,9 @@ export default class Player extends React.Component{
                     'ws://90.188.92.68:3333/app/qwerty2_720_60?policy=eyJ1cmxfZXhwaXJlIjo3OTU1MDg5MzQ1MDAwfQ&signature=Npv36RmruxIAmzPyEdjLPKRRph4',
                     'ws://90.188.92.68:3333/app/qwerty2_720_60?policy=eyJ1cmxfZXhwaXJlIjo3OTU1MDg5MzQ1MDAwfQ&signature=Npv36RmruxIAmzPyEdjLPKRRph4'
                 ]
+            } else {
+                links = this.props.links.replace(/[{}']/g, "").split(',');
             }
-
-            links = this.props.links.replace(/[{}']/g, "").split(',');
 
             const script = document.createElement("script");
             script.text = "const totalTestSources = [\n" +
