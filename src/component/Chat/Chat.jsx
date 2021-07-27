@@ -8,31 +8,39 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
-import Typography from "@material-ui/core/Typography";
+import {cookie} from "../../endpoint/cookie";
 
-import socket from '../../endpoint/socket';
-
-export default function Chat({disabled}) {
+export default function Chat({disabled, streamer}) {
     const classes = useStyles();
-    const userName = 'blabla';
+    const userName = cookie.get('username');
 
     const [messagesList, addMessage] = useState([]);
     const [messages, saveMessage] = useState('');
 
     let index = 1;
 
-    socket.onmessage = e => {
-        const data = JSON.parse(e.data);
+    const socket = new WebSocket(`ws://90.188.92.68:65000/ws/${streamer}/`);
 
-        addMessage([
-            ...messagesList,
-            createMessageView(data.username, data.message)
-        ]);
-    }
+    try{
+        socket.onmessage = e => {
+            if (e.data.username===userName){
+                return;
+            }
 
-    socket.onclose = _ => {
-        console.log('Disconnect');
-    }
+            const data = JSON.parse(e.data);
+
+            addMessage([
+                ...messagesList,
+                createMessageView(data.username, data.message)
+            ]);
+        }
+
+
+        socket.onclose = _ => {
+            console.log('Disconnect');
+        }
+    } catch(_){ }
+
 
     const createMessageView = (author, data) => (
         <ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
@@ -56,23 +64,19 @@ export default function Chat({disabled}) {
     );
 
     const sandMessage = () => {
-        if (!messages.length)
+        if (!messages.length || !userName.length)
             return;
 
-        socket.send(JSON.stringify({
-            message: messages,
-            username: 'admin',
-            channel: 1
-        }));
+        try{
+            socket.send(JSON.stringify({
+                message: messages,
+                username: userName,
+                channel: 1
+            }));
 
-        // socket.emit('sendMessage', message);
-
-        addMessage([
-            ...messagesList,
-            createMessageView(userName, messages)
-        ]);
-        saveMessage('');
-        index++;
+            saveMessage('');
+            index++;
+        }catch (_){}
     }
 
     const scrollRef = useRef(null)

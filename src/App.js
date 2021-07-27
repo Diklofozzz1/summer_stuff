@@ -2,9 +2,9 @@ import React from 'react'
 
 import Routes from "./routes";
 import {ThemeProvider} from "@material-ui/core";
-import {CssBaseline, Button} from "@material-ui/core";
+import {CssBaseline} from "@material-ui/core";
 
-import {PaletteContext, themes} from './palette/PaletteContext';
+import {PaletteContext} from './palette/PaletteContext';
 
 import './App.css';
 
