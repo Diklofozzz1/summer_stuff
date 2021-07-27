@@ -1,0 +1,6 @@
+[submodule "Stream"]
+	path = Stream
+	url = https://github.com/LittleMoon215/Stream.git
+[submodule "chat"]
+	path = chat
+	url = https://github.com/Fjeres/chat.git
