@@ -72,7 +72,7 @@ export default class App extends React.Component {
         return (
             <ThemeProvider theme={this.state.theme}>
                 <CssBaseline>
-                    <PaletteContext.Provider value={this.state}>
+                    <PaletteContext.Provider value={this.state} >
                         <Routes />
                     </PaletteContext.Provider>
                 </CssBaseline>

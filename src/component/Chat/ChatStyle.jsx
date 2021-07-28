@@ -3,11 +3,11 @@ import {makeStyles} from "@material-ui/core/styles";
 export const useStyles = makeStyles((theme) => ({
     chatSection: {
         display: "inline-block",
-        width: "25vw",
-        height: '70%'
+        width: "27vw",
+        height: '75%'
     },
     messageArea: {
-        height: "80vh",
+        height: "75vh",
         overflowY: 'auto',
         '&::-webkit-scrollbar': {
             width: '0.1em'

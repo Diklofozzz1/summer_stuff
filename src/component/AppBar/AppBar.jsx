@@ -1,4 +1,5 @@
 import React, {useContext, useState} from 'react';
+import { useHistory } from "react-router-dom";
 
 import {cookie} from "../../endpoint/cookie";
 
@@ -123,6 +124,8 @@ export function MenuAppBar({parent}) {
     const context = useContext(PaletteContext);
 
     const [infoModal, openInfoModal] = useState(false);
+
+    const history = useHistory();
 
     return (
         <div className={classes.root}>
@@ -337,15 +340,15 @@ export function MenuAppBar({parent}) {
                     <div className={classes.appbar_buttons_group}>
                         <div className={classes.appbar_buttons}>
                             <Typography variant="subtitle1">
-                                <a href='/' style={{
-                                    cursor: 'default',
-                                    textDecoration: 'none',
-                                    color: 'white'
-                                }}>
-                                    <MenuItem>
+                                {/*<a href='/' style={{*/}
+                                {/*    cursor: 'default',*/}
+                                {/*    textDecoration: 'none',*/}
+                                {/*    color: 'white'*/}
+                                {/*}}>*/}
+                                    <MenuItem onClick={() => {history.push('/');  document.getElementById('player').style.display = 'none'}}>
                                         Трансляции онлайн
                                     </MenuItem>
-                                </a>
+                                {/*</a>*/}
 
                             </Typography>
                         </div>
@@ -396,11 +399,11 @@ export function MenuAppBar({parent}) {
 
                                         {/*<MenuItem onClick={()=>{}}>Настройки</MenuItem>*/}
 
-                                        <MenuItem>
-                                            <Switch checked={state.checkedA} onChange={(event) => {
-                                                context.toggleTheme();
-                                                setState({...state, [event.target.name]: event.target.checked});
-                                            }} name="checkedA"/>
+                                        <MenuItem onClick={context.toggleTheme}>
+                                            {/*<Switch checked={state.checkedA} onChange={(event) => {*/}
+                                            {/*    ;*/}
+                                            {/*    setState({...state, [event.target.name]: event.target.checked});*/}
+                                            {/*}} name="checkedA"/>*/}
                                             Dark mode
                                         </MenuItem>
                                         <MenuItem className={classes.logout} onClick={() => {

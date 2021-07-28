@@ -52,7 +52,7 @@ export default class StreamPage extends React.Component {
         }
 
         return (
-            <div>
+            <div style = {{width: '100%', height: '100%'}}>
                 <MenuAppBar parent={this}/>
 
                 {this.player}
@@ -60,7 +60,7 @@ export default class StreamPage extends React.Component {
                 <div style={{position: 'absolute', right: 0}}>
                     <Chat disabled={this.state.isAuth === false} streamer={this.props.match.params.streamer}/>
                 </div>
-                <div style={{top: '47vw', marginLeft: '1%', position: 'absolute'}}>
+                <div style={{bottom:'1%', marginLeft: '1%', position: 'absolute'}}>
                     <div style={{display: 'inline-block',}}>
                         <Avatar style={{width: '3vw', height: '3vw'}}/>
                     </div>

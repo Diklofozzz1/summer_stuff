@@ -24,7 +24,8 @@ export default class Player extends React.Component{
             }
 
             const script = document.createElement("script");
-            script.text = "const totalTestSources = [\n" +
+            const hash = Math.floor(Math.random()*100).toString().substring(0,2);
+            script.text = `let _streamSourses${hash} = [\n` +
                 "            {\n" +
                 "                type: 'webrtc',\n" +
                 `                file:  '${links[2].replace(' ', '')}',\n` +
@@ -44,11 +45,13 @@ export default class Player extends React.Component{
                 "        ];" +
                 "           var player = OvenPlayer.create(\"player\", {" +
                 "\n                                              debug : true," +
-                "\n                                              sources: totalTestSources\n" +
+                `\n                                              sources: _streamSourses${hash}\n` +
                 "});";
 
             script.onload = () => this.scriptLoaded();
             document.body.appendChild(script);
+            // document.body.append(script);
+           // script.remove();
         }catch(_){
             console.error(_);
         }
