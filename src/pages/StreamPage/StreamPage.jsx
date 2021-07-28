@@ -55,7 +55,7 @@ export default class StreamPage extends React.Component {
             <div>
                 <MenuAppBar parent={this}/>
 
-                { this.player }
+                {this.player}
 
                 <div style={{position: 'absolute', right: 0}}>
                     <Chat disabled={this.state.isAuth === false} streamer={this.props.match.params.streamer}/>

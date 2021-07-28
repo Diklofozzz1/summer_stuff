@@ -17,7 +17,7 @@ export default function StreamCard({userName, streamName}) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    image="/static/images/cards/contemplative-reptile.jpg"
+                    image={`http://90.188.92.68:8080/app/${userName}_preview/thumb.png`}
                     title="Contemplative Reptile"
                 />
                 <CardContent>

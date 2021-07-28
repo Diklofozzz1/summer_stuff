@@ -19,7 +19,12 @@ export default function Chat({disabled, streamer}) {
 
     let index = 1;
 
-    const socket = new WebSocket(`ws://90.188.92.68:65000/ws/${streamer}/`);
+    const [socket, setSocket] = useState(null);
+
+    if (!socket) {
+        console.log('connected');
+        setSocket(new WebSocket(`ws://90.188.92.68:65000/ws/${streamer}/`));
+    }
 
     try{
         socket.onmessage = e => {
