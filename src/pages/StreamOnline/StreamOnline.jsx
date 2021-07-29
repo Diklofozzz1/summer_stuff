@@ -23,7 +23,7 @@ export default class StreamPage extends React.Component {
             let _data = response.data;
             for(let key in _data){
                 if (_data.hasOwnProperty(key)){
-                    cards.push(<StreamCard userName={key} streamName={_data[key][1]}/>);
+                    cards.push(<StreamCard disableRedirect={true} userName={key} streamName={_data[key][1]}/>);
                 }
             }
             this.setState({

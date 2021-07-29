@@ -9,6 +9,7 @@ import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import {useStyles} from "./ChatStyle";
 import {cookie} from "../../endpoint/cookie";
+import UserProfile from "../UserProfile/UserProfile";
 
 export default function Chat({disabled, streamer}) {
     const classes = useStyles();
@@ -16,6 +17,8 @@ export default function Chat({disabled, streamer}) {
 
     const [messagesList, addMessage] = useState([]);
     const [messages, saveMessage] = useState('');
+    const [userProfile, openUserProfile] = useState(false);
+    const [author, setAuthor] = useState('')
 
     let index = 1;
 
@@ -47,8 +50,10 @@ export default function Chat({disabled, streamer}) {
     } catch(_){ }
 
 
-    const createMessageView = (author, data) => (
+    const createMessageView = (author, data) => {
+        return(
         <ListItem style={{padding: 0, paddingLeft: '0.5vw'}} key={index}>
+
             <Grid container>
                 <Grid item xs={12}>
                     <ListItemText
@@ -56,17 +61,19 @@ export default function Chat({disabled, streamer}) {
                         align="left"
                         primary={
                             <div>
-                                <span
+
+                                <span onClick={()=>{openUserProfile(true);setAuthor(author)}}
                                     style={{color: `#${((1<<24)*Math.random() | 0).toString(16)}`}}>
                                     {author}
                                 </span>: {data}
+                                {/*<button >aaa</button>*/}
                             </div>
                         }
                     />
                 </Grid>
             </Grid>
         </ListItem>
-    );
+    )};
 
     const sandMessage = () => {
         if (!messages.length || !userName.length)
@@ -94,6 +101,7 @@ export default function Chat({disabled, streamer}) {
         return (
 
             <div>
+                <UserProfile username = {author} isOpen={userProfile} handler = {openUserProfile}/>
                 <Grid className={classes.chatSection}>
                     <Grid item xs={11}>
                         <List className={classes.messageArea}>

@@ -247,7 +247,7 @@ export function MenuAppBar({parent}) {
                             }} color="primary">
                                 Назад
                             </Button>
-                            <Button variant="contained" onClick={() => {
+                            <Button disabled={username.length < 5 || !checkEmail(email) || password.length < 8 || password !== confirmedPassword || confirmedPassword.length === 0} variant="contained" onClick={() => {
                                 openRegModal(false);
                                 handleRegModal()
                             }} color="primary">
@@ -500,11 +500,11 @@ export function MenuAppBar({parent}) {
                                             />
                                         </DialogContent>
                                         <DialogActions>
-                                            <Button variant="contained" onClick={() => {
+                                            <Button variant="contained" onClick={() => {setOpen(false)
                                             }} color="primary">
                                                 Назад
                                             </Button>
-                                            <Button variant="contained" onClick={() => {
+                                            <Button disabled={username.length < 0 || password.length < 8} variant="contained" onClick={() => {
                                                 handleCloseModal()
                                             }} color="primary">
                                                 Войти
@@ -512,7 +512,7 @@ export function MenuAppBar({parent}) {
                                             <Button variant="contained" onClick={() => {
                                                 openRegModal(true);
                                             }} color="primary">
-                                                Зарегестрироваться
+                                                Зарегистрироваться
                                             </Button>
                                         </DialogActions>
                                     </Dialog>

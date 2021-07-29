@@ -7,6 +7,7 @@ import PLayer from '../../component/PLayer/PLayer';
 import Chat from '../../component/Chat/Chat';
 import { cookie } from '../../endpoint/cookie';
 import { apiStreamPool, apiSubscribe, apiUnsubscribe, apiUserSubscriptions } from '../../api/api';
+import UserProfile from "../../component/UserProfile/UserProfile";
 
 
 export default class StreamPage extends React.Component {
@@ -19,7 +20,8 @@ export default class StreamPage extends React.Component {
             isError: false,
             isAuth: cookie.get('isAuth') === 'true',
             streamLinks: [],
-            isSubscribed: false
+            isSubscribed: false,
+            openUserProfile: false
         }
     }
 
@@ -126,8 +128,9 @@ export default class StreamPage extends React.Component {
         return (
             <div style = {{width: '100%', height: '100%'}}>
                 <MenuAppBar parent = {this} />
-
                 {this.player}
+
+                <UserProfile username = {this.state.userName} isOpen={this.state.openUserProfile} handler = {(flag) => {this.setState({openUserProfile: flag})}}/>
 
                 <div style = {{position: 'absolute', right: 0}}>
                     <Chat disabled = {this.state.isAuth === false} streamer = {this.props.match.params.streamer} />
@@ -137,7 +140,7 @@ export default class StreamPage extends React.Component {
                         <Avatar style = {{width: '3vw', height: '3vw'}} />
                     </div>
                     <div style = {{display: 'inline-block', marginLeft: '2vh'}}>
-                        <Typography variant = 'h5' style = {{margin: 2}}> {this.state.userName} </Typography>
+                        <Typography variant = 'h5' style = {{margin: 2}} onClick={() => {this.setState({openUserProfile:true})}}> {this.state.userName} </Typography>
                         <Typography style = {{margin: 2}}> Now streaming: {this.state.streamName}</Typography>
                     </div>
                     <div style = {{display: 'inline', marginLeft: '2vh'}}>

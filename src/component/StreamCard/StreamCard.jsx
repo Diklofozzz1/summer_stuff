@@ -8,12 +8,12 @@ import { useHistory } from "react-router";
 
 import {useStyles} from './StreamCardStyle'
 
-export default function StreamCard({userName, streamName}) {
+export default function StreamCard({userName, streamName, disableRedirect}) {
     const classes = useStyles();
     const history = useHistory();
 
     return (
-        <Card className={classes.root} onClick={() => history.push(`/stream/${userName}`)}>
+        <Card className={classes.root} onClick={() => {if (disableRedirect){history.push(`/stream/${userName}`)}}}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}

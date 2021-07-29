@@ -13,5 +13,10 @@ export const useStyles = makeStyles((theme) => ({
     text:{
         textAlign: "center",
        // color: "black",
+    },
+
+    textField:{
+        textAlign:"center",
+        width: "3vw",
     }
 }));
