@@ -1,12 +1,12 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom'
-import {Avatar, Typography, Button} from '@material-ui/core';
+import { Redirect } from 'react-router-dom'
+import { Avatar, Typography, Button } from '@material-ui/core';
 
-import {MenuAppBar} from '../../component/AppBar/AppBar';
+import { MenuAppBar } from '../../component/AppBar/AppBar';
 import PLayer from '../../component/PLayer/PLayer';
 import Chat from '../../component/Chat/Chat';
-import {cookie} from "../../endpoint/cookie";
-import {apiStreamPool} from "../../api/api";
+import { cookie } from '../../endpoint/cookie';
+import { apiStreamPool, apiSubscribe, apiUnsubscribe, apiUserSubscriptions } from '../../api/api';
 
 
 export default class StreamPage extends React.Component {
@@ -18,7 +18,8 @@ export default class StreamPage extends React.Component {
             streamName: this.props.streamName,
             isError: false,
             isAuth: cookie.get('isAuth') === 'true',
-            streamLinks: []
+            streamLinks: [],
+            isSubscribed: false
         }
     }
 
@@ -29,49 +30,115 @@ export default class StreamPage extends React.Component {
             try {
                 const data = response.data[this.props.match.params.streamer];
 
-                this.player = <PLayer links={data[0]}/>;
+                this.player = <PLayer links = {data[0]} />;
 
                 this.setState({
                     streamName: data[1],
                     streamLinks: data[0]
                 });
-            } catch (err) {
+            } catch(err) {
                 this.setState({
                     isError: true
                 });
             }
+        });
+
+        const currUser = cookie.get('username');
+        if( currUser === null || currUser === undefined )
+            return;
+
+        if( currUser.length ) {
+            // apiUserSubscriptions(currUser).then(res => {
+            const obj = [{
+                subscribe: [
+                    'moony2',
+                    'user2'
+                ]
+            }];
+
+            const subscriptions = obj[0].subscribe;
+
+            for( const user of subscriptions ) {
+                if( user === this.state.userName ) {
+                    this.setState({
+                        isSubscribed: true
+                    });
+
+                    break;
+                }
+            }
+            // }).catch(_ => {
+            //     alert('Server problems')
+            // })
+        }
+    }
+
+    subscribe = () => {
+        if( cookie.get('username') === this.state.userName )
+            return;
+
+        // apiSubscribe(cookie.get('username'), this.state.userName).then(res => {
+        this.setState({
+            isSubscribed: true,
         })
+        // })
+    }
+
+    unsubscribe = () => {
+        if( cookie.get('username') === this.state.userName )
+            return;
+
+        // apiUnsubscribe(cookie.get('username'), this.state.userName).then(res => {
+        this.setState({
+            isSubscribed: false,
+        })
+        // })
+    }
+
+    handlerSubscribeButtonText = () => {
+        if (cookie.get('username') === this.state.userName)
+            return 'Подписаться на себя?';
+
+        return this.state.isSubscribed ? 'Отписаться' : 'Подписаться';
     }
 
     render() {
-        console.log(this.state.streamLinks);
-
-        if (!this.state.userName || this.state.isError) {
+        if( !this.state.userName || this.state.isError ) {
             document.getElementById('player').style.display = 'none';
-            return <Redirect to='/error?error=404'/>
+            return <Redirect to = '/error?error=404' />
         }
 
         return (
             <div style = {{width: '100%', height: '100%'}}>
-                <MenuAppBar parent={this}/>
+                <MenuAppBar parent = {this} />
 
                 {this.player}
 
-                <div style={{position: 'absolute', right: 0}}>
-                    <Chat disabled={this.state.isAuth === false} streamer={this.props.match.params.streamer}/>
+                <div style = {{position: 'absolute', right: 0}}>
+                    <Chat disabled = {this.state.isAuth === false} streamer = {this.props.match.params.streamer} />
                 </div>
-                <div style={{bottom:'1%', marginLeft: '1%', position: 'absolute'}}>
-                    <div style={{display: 'inline-block',}}>
-                        <Avatar style={{width: '3vw', height: '3vw'}}/>
+                <div style = {{bottom: '1%', marginLeft: '1%', position: 'absolute'}}>
+                    <div style = {{display: 'inline-block',}}>
+                        <Avatar style = {{width: '3vw', height: '3vw'}} />
                     </div>
-                    <div style={{display: 'inline-block', marginLeft: '2vh'}}>
-                        <Typography variant='h5' style={{margin: 2}}> {this.state.userName} </Typography>
-                        <Typography style={{margin: 2}}> Now streaming: {this.state.streamName}</Typography>
+                    <div style = {{display: 'inline-block', marginLeft: '2vh'}}>
+                        <Typography variant = 'h5' style = {{margin: 2}}> {this.state.userName} </Typography>
+                        <Typography style = {{margin: 2}}> Now streaming: {this.state.streamName}</Typography>
                     </div>
-                    <div style={{display: 'inline', marginLeft: '2vh'}}>
+                    <div style = {{display: 'inline', marginLeft: '2vh'}}>
                         <Button
-                            disabled={this.state.isAuth === false} variant='contained' color='primary'
-                        > Подписаться </Button>
+                            disabled = {
+                                this.state.isAuth === false ||
+                                cookie.get('username') === this.state.userName
+                            }
+                            variant = {this.state.isAuth === false || cookie.get('username') === this.state.userName ? 'contained' : this.state.isSubscribed ? 'outlined' : 'contained'}
+                            color = 'primary'
+                            onClick = {() => {
+                                this.state.isSubscribed ? this.unsubscribe() : this.subscribe()
+                            }}
+                        >
+                            { this.handlerSubscribeButtonText() }
+                        </Button>
                     </div>
                 </div>
             </div>
