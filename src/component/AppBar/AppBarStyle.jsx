@@ -32,4 +32,5 @@ export const useStyles = makeStyles((theme) => ({
     logout:{
         color: "#e35252",
     },
+
 }));

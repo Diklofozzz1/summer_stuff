@@ -13,11 +13,12 @@ import {
     Button, IconButton,
     DialogContentText, DialogContent,
     DialogActions, DialogTitle, Dialog,
-    TextField, Switch
+    TextField
 } from '@material-ui/core';
 
 import {useStyles} from "./AppBarStyle";
 import {PaletteContext} from '../../palette/PaletteContext';
+import UserProfile from "../UserProfile/UserProfile";
 
 
 export function MenuAppBar({parent}) {
@@ -82,6 +83,10 @@ export function MenuAppBar({parent}) {
         setPassword('');
         setConfirmedPassword('');
     }
+    //
+    // const openUserProfile = () => {
+    //    return
+    // }
 
     const checkEmail = (email) => {
         return validateEmail.test(email);
@@ -113,6 +118,7 @@ export function MenuAppBar({parent}) {
 
     const [regModel, openRegModal] = useState(false);
 
+
     const [state, setState] = React.useState({
         checkedA: false
     });
@@ -123,14 +129,19 @@ export function MenuAppBar({parent}) {
 
     const context = useContext(PaletteContext);
 
+    const [userProfile, openUserProfile] = useState(false);
+
     const [infoModal, openInfoModal] = useState(false);
 
     const history = useHistory();
+
+    console.log('aaa');
 
     return (
         <div className={classes.root}>
             <AppBar className={classes.appbar} position="static">
                 <Toolbar>
+
                     <Dialog open={regModel} onClose={() => {
                         openRegModal(false)
                     }} aria-labelledby="form-dialog-title">
@@ -245,9 +256,14 @@ export function MenuAppBar({parent}) {
                         </DialogActions>
                     </Dialog>
 
-                    <Dialog maxWidth={'md'} open={infoModal} onClose={() => {
-                        openInfoModal(false)
-                    }} aria-labelledby="form-dialog-title">
+                    {/*--------------------------------------------------------------*/}
+
+                    <Dialog maxWidth={'md'}
+                            open={infoModal}
+                            onClose={() => {
+                                openInfoModal(false)
+                            }}
+                            aria-labelledby="form-dialog-title">
                         <DialogTitle id="form-dialog-title">Спасибо, что выбираете KEKW.tv</DialogTitle>
                         <DialogContent>
                             <DialogContentText>
@@ -333,6 +349,11 @@ export function MenuAppBar({parent}) {
                         </DialogActions>
                     </Dialog>
 
+                    {/*---------------------------------------------*/}
+
+                    <UserProfile username = {username} isOpen={userProfile} handler = {openUserProfile}/>
+
+                    {/*------------------------------*/}
 
                     <Typography variant="h4" className={classes.title}>
                         KEKW.tv
@@ -352,13 +373,14 @@ export function MenuAppBar({parent}) {
 
                             </Typography>
                         </div>
-                        {auth ? (
-                            <div className={classes.appbar_buttons}>
-                                <Typography variant="subtitle1">
-                                    <MenuItem>Отслеживаемое</MenuItem>
-                                </Typography>
-                            </div>
-                        ) : (<div/>)}
+                        {/*{auth ? (*/}
+                        {/*    (<div/>)*/}
+                        {/*    // <div className={classes.appbar_buttons}>*/}
+                        {/*    //     <Typography variant="subtitle1">*/}
+                        {/*    //         <MenuItem>Отслеживаемое</MenuItem>*/}
+                        {/*    //     </Typography>*/}
+                        {/*    // </div>*/}
+                        {/*) : (<div/>)}*/}
                     </div>
 
                     {
@@ -391,7 +413,7 @@ export function MenuAppBar({parent}) {
                                             setAnchorEl(undefined)
                                         }}
                                     >
-                                        <MenuItem disabled={true}>В системе под именем: {username}</MenuItem>
+                                        <MenuItem onClick={()=>{openUserProfile(true); console.log('111')}}>В системе под именем: {username}</MenuItem>
                                         <MenuItem onClick={() => {
                                             openInfoModal(true);
                                             handleStreamKey()
