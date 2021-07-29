@@ -70,6 +70,13 @@ export function MenuAppBar({parent}) {
                 parent.setState({isAuth: true});
                 setAnchorEl(null);
             }
+        }).catch((error) => {
+             if(error.response.status === 401){
+                alert('Не правильно введены данные! Попробуйте еще раз.')
+            }else{
+                 alert('Сервер не отвечает!');
+                 console.log(error);
+             }
         })
         setOpen(false);
     };
@@ -103,16 +110,23 @@ export function MenuAppBar({parent}) {
                         setAnchorEl(null);
                         parent.setState({isAuth: true});
                         // setUsername(username);
-                    } else {
-                        alert('Ошибка авторизации!');
+                    }
+                }).catch((error) => {
+                    if (error.response.status === 400) {
+                        alert('Пользователь с такими полями уже создан!');
+                    }else{
+                        alert('Сервер не отвечает!');
+                        console.log(error)
                     }
                 })
-            } else if (response.status === 400) {
-                alert('Пользователь с такими полями уже создан!');
             }
         }).catch((error) => {
-            alert('Сервер не отвечает!');
-            console.log(error)
+            if (error.response.status === 400) {
+                alert('Пользователь с такими полями уже создан!');
+            }else{
+                alert('Сервер не отвечает!');
+                console.log(error)
+            }
         })
     }
 
