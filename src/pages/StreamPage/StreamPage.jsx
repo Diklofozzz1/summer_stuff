@@ -48,28 +48,25 @@ export default class StreamPage extends React.Component {
             return;
 
         if( currUser.length ) {
-            // apiUserSubscriptions(currUser).then(res => {
-            const obj = [{
-                subscribe: [
-                    'moony2',
-                    'user2'
-                ]
-            }];
+            apiUserSubscriptions(currUser).then(res => {
+                if (!res.data[0].subscribe)
+                    return;
 
-            const subscriptions = obj[0].subscribe;
+                const subscriptions = res.data[0].subscribe;
 
-            for( const user of subscriptions ) {
-                if( user === this.state.userName ) {
-                    this.setState({
-                        isSubscribed: true
-                    });
+                for( const user of subscriptions ) {
+                    if( user === this.state.userName ) {
+                        this.setState({
+                            isSubscribed: true
+                        });
 
-                    break;
+                        break;
+                    }
                 }
-            }
-            // }).catch(_ => {
-            //     alert('Server problems')
-            // })
+            }).catch(err => {
+                alert('Временные технические шоколадки');
+                console.error(err);
+            })
         }
     }
 
@@ -77,22 +74,40 @@ export default class StreamPage extends React.Component {
         if( cookie.get('username') === this.state.userName )
             return;
 
-        // apiSubscribe(cookie.get('username'), this.state.userName).then(res => {
-        this.setState({
-            isSubscribed: true,
+        apiSubscribe(cookie.get('username'), this.state.userName).then(res => {
+            if (res.status === 200) {
+                this.setState({
+                    isSubscribed: true,
+                })
+            } else if (res.status === 400) {
+                alert('Пока что невозможно подписаться от этого пользователя(')
+            } else if (res.status === 404) {
+                alert('Такого пользователя не существует!');
+            }
+        }).catch(err => {
+            alert('Временные технические шоколадки');
+            console.error(err);
         })
-        // })
     }
 
     unsubscribe = () => {
         if( cookie.get('username') === this.state.userName )
             return;
 
-        // apiUnsubscribe(cookie.get('username'), this.state.userName).then(res => {
-        this.setState({
-            isSubscribed: false,
+        apiUnsubscribe(cookie.get('username'), this.state.userName).then(res => {
+            if (res.status === 200) {
+                this.setState({
+                    isSubscribed: false,
+                })
+            } else if (res.status === 400) {
+                alert('Пока что невозможно отписаться от этого пользователя(')
+            } else if (res.status === 404) {
+                alert('Такого пользователя не существует!');
+            }
+        }).catch(err => {
+            alert('Временные технические шоколадки');
+            console.error(err);
         })
-        // })
     }
 
     handlerSubscribeButtonText = () => {
