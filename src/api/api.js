@@ -53,3 +53,52 @@ export function apiStreamPool(){
         url: 'http://privetdima.xyz:8000/api/streams',
     })
 }
+
+export const apiUserInfo = (userName) => {
+    return axios({
+        method: 'GET',
+        url: `http://privetdima.xyz:8000/api/info/${userName}`
+    });
+}
+
+export const apiUserSubscriptions = (userName) => {
+    return axios({
+        method: 'GET',
+        url: `http://privetdima.xyz:8000/api/subscribe/${userName}`
+    });
+}
+
+export const apiSubscribe = (fromUser, toUser) => {
+    return axios({
+        method: 'POST',
+        url: `http://privetdima.xyz:8000/api/subscribe/`,
+        data: {
+            username: fromUser,
+            subscribe: toUser
+        }
+    });
+}
+
+export const apiAddMoreUserInfo = (userName, age, country, information) => {
+    return axios({
+        method: 'POST',
+        url: `http://privetdima.xyz:8000/api/info/`,
+        data: {
+            username : userName,
+            age: age,
+            country: country,
+            information: information
+        }
+    });
+}
+
+export const apiUnsubscribe = (user, fromUser) => {
+    return axios({
+        method: 'POST',
+        url: `http://privetdima.xyz:8000/api/unsubscribe/`,
+        data: {
+            username: user,
+            subscribe: fromUser
+        }
+    });
+}
