@@ -108,7 +108,7 @@ export default function UserProfile({username, isOpen, handler}){
         return Object.keys(object).find(key => object[key] === value);
     }
 
-    if(!age && !countryShort.length && !description.length){
+    if(!age || !countryShort.length || !description.length){
         getInfoHandle();
     }
 
